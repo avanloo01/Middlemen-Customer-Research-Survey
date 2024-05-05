@@ -20,16 +20,26 @@ function triangularDistribution(min, mode, max) {
   }
 }
 
-function doGet(e) {
+function onOpen(e) {
   // This function runs when the form is opened
   var form = FormApp.getActiveForm();
   var items = form.getItems();
   
   // Loop through each question and generate a random number
-  for (var i = 0; i < items.length; i++) {
+  for (var i = 0; i < 5; i++) {
     var randomPrice = triangularDistribution(20,200,3500);
     var randomFee = triangularDistribution(5,20,200);
-    console.log(randomPrice);
     items[i].setTitle('Imagine you are buying a second-hand product, but you do not have a lot of experience in buying these products. After haggling with the seller, the product costs € ' + randomPrice + '\n\nSince you do not know a lot about the product category, you come to our platform. For a fee of € ' + randomFee + ', a third party middleman with relevant experience on these products will review whether the product is authentic and whether it functions accordingly.\n\nIn your opinion, this fee is ...');
+
+  }
+}
+
+function submitFunction(e){
+  priceRegEx = new RegExp("costs € (\\d+)");
+  feeRegEx = new RegExp("fee of € (\\d+)");
+
+  for(var i = 0; i <5;i++){
+    var title = e.response.getItemResponses()[i].getItem().getTitle();
+    Logger.log(priceRegEx.exec(title)[1] + "," + feeRegEx.exec(title)[1])
   }
 }
